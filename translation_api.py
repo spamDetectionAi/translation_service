@@ -1,21 +1,24 @@
 from flask import Flask, request, jsonify
 from translator_service import translate_text
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/api/translate', methods=['POST'])
 def translate():
     data = request.json
     text = data.get('text')
-    lang = data.get('lang', 'en')
+    lang = data.get('lang')
     
     if not text:
         return jsonify({'error': 'No text provided'}), 400
     
-    translated = translate_text(text, dest_language=lang)
-    return jsonify({'translated_text': translated})
+    translated = translate_text(text, lang)
+    return translated
 print("Script is starting...")
-# (rest of your imports and code)
+
+
 
 if __name__ == '__main__':
     print("Main block is executing...")
